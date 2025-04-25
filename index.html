@@ -1,0 +1,113 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker game v1.2</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .counter {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .shop {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .shop-item {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #eee;
+        }
+        .total-spent {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clicker Game</h1>
+    <button id="button">Button</button>
+    <button id="otherButton">Other Button</button>
+    <div class="counter" id="clickCounter">Click Counter: 0</div>
+    <div class="counter" id="otherClickCounter">Other Click Counter: 0</div>
+
+    <div class="shop">
+        <h2>Shop</h2>
+        <div class="shop-item">
+            <h3>Auto Clicker</h3>
+            <p>Cost: 10 clicks</p>
+            <button id="buyAutoClicker">Buy Auto Clicker</button>
+        </div>
+        <div class="shop-item">
+            <h3>Click Multiplier</h3>
+            <p>Cost: 50 clicks</p>
+            <button id="buyMultiplier">Buy Multiplier</button>
+        </div>
+        <div class="total-spent" id="totalSpent">Total Spent: 0 clicks</div>
+    </div>
+
+    <script>
+        let buttonCount = 0;
+        let otherButtonCount = 0;
+        let totalSpent = 0;
+        let autoClickers = 0;
+        let clickMultiplier = 1;
+
+        document.getElementById('button').addEventListener('click', function() {
+            buttonCount += clickMultiplier;
+            updateCounters();
+        });
+
+        document.getElementById('otherButton').addEventListener('click', function() {
+            otherButtonCount++;
+            updateCounters();
+        });
+
+        document.getElementById('buyAutoClicker').addEventListener('click', function() {
+            if (buttonCount >= 10) {
+                buttonCount -= 10;
+                totalSpent += 10;
+                autoClickers++;
+                updateCounters();
+                
+                // Start auto clicking if this is the first auto clicker
+                if (autoClickers === 1) {
+                    setInterval(function() {
+                        buttonCount += autoClickers * clickMultiplier;
+                        updateCounters();
+                    }, 1000);
+                }
+            }
+        });
+
+        document.getElementById('buyMultiplier').addEventListener('click', function() {
+            if (buttonCount >= 50) {
+                buttonCount -= 50;
+                totalSpent += 50;
+                clickMultiplier++;
+                updateCounters();
+            }
+        });
+
+        function updateCounters() {
+            document.getElementById('clickCounter').innerText = 'Click Counter: ' + buttonCount;
+            document.getElementById('otherClickCounter').innerText = 'Other Click Counter: ' + otherButtonCount;
+            document.getElementById('totalSpent').innerText = 'Total Spent: ' + totalSpent + ' clicks';
+        }
+    </script>
+</body>
+</html>
